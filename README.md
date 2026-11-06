@@ -9,6 +9,34 @@
 API for COVID-19 stats in India, sourced from [The Ministry of Health and Family Welfare](https://www.mohfw.gov.in/)
 and separately from [unofficial sources](#unofficial-sources)
 
+## Usage
+
+Call any endpoint over HTTPS and read the JSON response. Every
+response uses the same envelope (see `api.js`): on success,
+`{ "success": true, "data": ..., "lastRefreshed": ..., "lastOriginUpdate": ... }`;
+on failure, `{ "success": false, "error": ... }` with an HTTP error
+status. For example, the latest case counts:
+
+```bash
+curl https://api.rootnet.in/covid19-in/stats/latest
+```
+
+The full endpoint list is under [API](#api) below.
+
+## Development
+
+The service is a Cloudflare Worker created with
+[Wrangler](https://github.com/cloudflare/wrangler) (see "For
+contributors" below); `index.js` is the worker entry point and
+`refresh.js` rebuilds the cached data from the sources listed below.
+
+- Run the tests: `node --test test/api.test.mjs` (Node 22+; the suite
+  covers the response helpers and store keys — see TEST-PLAN.md for
+  the scope and its limits).
+- Security reports: see [SECURITY.md](SECURITY.md) — please use
+  GitHub Private Vulnerability Reporting, not a public issue.
+- Contributions: see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## API
 
 #### Official data
